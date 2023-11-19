@@ -45,6 +45,13 @@ def new_conversation(request, item_pk):
 @login_required
 def inbox(request):
     conversations = Conversation.objects.filter(members__in=[request.user.id])
-    print(conversations[0].messages)
     context = {'conversations': conversations}
     return render(request, 'conversation/inbox.html', context)
+
+
+@login_required
+def conversation_detail(request, pk):
+    conversation = Conversation.objects.filter(
+        members__in=[request.user.id]).get(pk=pk)
+    context = {'conversation': conversation}
+    return render(request, 'conversation/detail.html', context)
