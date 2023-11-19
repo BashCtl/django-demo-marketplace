@@ -6,6 +6,7 @@ from .models import Conversation
 from .forms import ConversationMessageForm
 # Create your views here.
 
+
 @login_required
 def new_conversation(request, item_pk):
     item = get_object_or_404(Item, pk=item_pk)
@@ -39,3 +40,11 @@ def new_conversation(request, item_pk):
 
     context = {'form': form}
     return render(request, 'conversation/new.html', context)
+
+
+@login_required
+def inbox(request):
+    conversations = Conversation.objects.filter(members__in=[request.user.id])
+    print(conversations[0].messages)
+    context = {'conversations': conversations}
+    return render(request, 'conversation/inbox.html', context)
